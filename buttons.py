@@ -3,6 +3,9 @@ from enum import IntEnum
 import RPi.GPIO as GPIO
 import time
 
+# GPIO.setup(21, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)    # set GPIO5 as input (button)  
+# GPIO.setup(11, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)    # set GPIO11 as input (beambreak)  
+
 class Button(IntEnum):
     BLACK = 5
     BLUE = 6
@@ -56,6 +59,9 @@ class Buttons(SwitchedInput):
     def big(self):
         return self.pressed(Button.BIG)
 
+    @property
+    def beam(self):
+        return self.pressed(Button.BEAM)
         
 class Optos(SwitchedInput):
     def __init__(self):
