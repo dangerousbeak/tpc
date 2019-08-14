@@ -12,27 +12,41 @@ class Button(IntEnum):
     GREEN = 13
     YELLOW = 19
     RED = 26
-    BEAM = 11
     BIG = 21
     BACK = 18
 
 class Opto(IntEnum):
     SIDE = 14
     FRONT = 15
+    BEAM = 11
 
 class SwitchedInput:
     def __init__(self, gpios):
         self.gpios = list(gpios)
+        self._muted = {}
         
         for b in gpios:
-            GPIO.setup(int(b), GPIO.IN)
+            GPIO.setup(int(b), GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
         
     def all_pressed(self):
         return [ b for b in self.gpios
                  if self.pressed(b) ]
 
-    def pressed(self, b):
-        return GPIO.input(b)
+    def pressed(self, b, mute_time=1.0):
+        pressed = GPIO.input(b)
+        now = time.time()
+        muted_until = self._muted.get(b)
+        if muted_until is not None:
+            if pressed or now < muted_until:
+                return False
+            del self._muted[b]
+
+        if not pressed:
+            return False
+        
+        self._muted[b] = now + mute_time
+        print("button: {}".format(b))
+        return True
 
   
 class Buttons(SwitchedInput):
@@ -59,10 +73,7 @@ class Buttons(SwitchedInput):
     def big(self):
         return self.pressed(Button.BIG)
 
-    @property
-    def beam(self):
-        return self.pressed(Button.BEAM)
-        
+
 class Optos(SwitchedInput):
     def __init__(self):
         super(Optos, self).__init__(Opto)  
@@ -72,8 +83,12 @@ class Optos(SwitchedInput):
                  if self.broken(b) ]
 
     def broken(self, b):
-        return GPIO.input(b)
+        return self.pressed(b)
 
+    @property
+    def beam(self):
+        return self.pressed(Opto.BEAM)
+    
     @property
     def side(self):
         return self.pressed(Opto.SIDE)

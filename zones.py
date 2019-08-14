@@ -20,7 +20,7 @@ class Racing(Zone):
         return State(ATTRACT)
 
     def exit(self):
-        self.game.sounds.stop_music()
+        self.game.sounds.stop_background_noise()
 
     def enter_state(self, state):
         g = self.game
@@ -29,7 +29,7 @@ class Racing(Zone):
         if state == ATTRACT:
             if state.sub_state == 0:
                 g.clock.reset()
-                g.sounds.play_music()
+                g.sounds.play_background_noise()
                 self.random_time = self.random_sound_time(state)
                 
             if not sub_state % 2:
@@ -52,7 +52,7 @@ class Racing(Zone):
             return State(BLINK, delay=2)
 
         if state == BLINK:
-            self.game.sounds.stop_music()
+            self.game.sounds.stop_background_noise()
             
             if sub_state % 15 == 0:
                 g.sounds.play("revving 1")
@@ -85,7 +85,7 @@ class Racing(Zone):
         if state == WAITING_TO_CROSS:
             g.lights.turn_on(5)
             g.clock.start()
-            g.sounds.play_music()
+            g.sounds.play_background_noise()
             g.sounds.play("long beep")
             g.sounds.play("3 - pulling away")
             return State(GAVE_UP, delay=10)
@@ -125,20 +125,22 @@ class Racing(Zone):
         sub_state = state.sub_state
 
         if g.buttons.black:
-            if state != ATTRACT:
-                g.sounds.play("crash")
-                return State(ATTRACT)
-            return None
-        
+            g.sounds.play("crash")
+            return State(ATTRACT)
+
+        if g.buttons.blue:
+            g.sounds.play("crash")
+
         if state == ATTRACT:
-            if state.timer > self.random_time:
-                g.sounds.play_random([
-                    "disqualified",
-                    "revving 1",
-                    "crash",
-                    "beep",
-                ])
-                self.random_time = self.random_sound_time(state)
+            if False:
+                if state.timer > self.random_time:
+                    g.sounds.play_random([
+                        "disqualified",
+                        "revving 1",
+                        "crash",
+                        "beep",
+                    ])
+                    self.random_time = self.random_sound_time(state)
                 
             if g.buttons.big:
                 return State(PRESTAGE)
@@ -150,17 +152,17 @@ class Racing(Zone):
             return
 
         if state == GO:
-            if g.buttons.beam:
+            if g.optos.beam:
                 return State(FAULT)
             return
                 
         if state == WAITING_TO_CROSS:
-            if g.buttons.beam:
+            if g.optos.beam:
                 return State(RUNNING)
             return
 
         if state == RUNNING:
-            if sub_state == 1 and g.buttons.beam:
+            if sub_state == 1 and g.optos.beam:
                 return State(END_OF_RACE)
             return
 

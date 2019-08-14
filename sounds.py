@@ -22,14 +22,14 @@ class Sounds(object):
         self.sounds = {}
         self.playing_music = False
 
-    def play_music(self):
+    def play_background_noise(self):
         if self.playing_music:
             return;
         self.mixer.music.load('/home/pi/tpc/sounds/0 - race-track-sounds.mp3')
         self.mixer.music.play(-1)  #negative number = loop forever
         self.playing_music = True
 
-    def stop_music(self):
+    def stop_background_noise(self):
         self.playing_music = False
         self.mixer.music.stop() #kill the background racetrack sounds
 
@@ -43,6 +43,8 @@ class Sounds(object):
     def play(self, sound_name, ext="wav"):
         sound = self.get_sound(sound_name, ext)
         empty_channel = self.mixer.find_channel()
+        if not empty_channel:
+            return
         empty_channel.play(sound)
 
     def play_random(self, sound_names, ext="wav"):
