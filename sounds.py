@@ -25,7 +25,7 @@ class Sounds(object):
     def play_music(self):
         if self.playing_music:
             return;
-        self.mixer.music.load('sounds/0 - race-track-sounds.mp3')
+        self.mixer.music.load('/home/pi/tpc/sounds/0 - race-track-sounds.mp3')
         self.mixer.music.play(-1)  #negative number = loop forever
         self.playing_music = True
 
@@ -36,7 +36,7 @@ class Sounds(object):
     def get_sound(self, sound_name, ext):
         sound = self.sounds.get(sound_name)
         if sound is None:
-            sound = mixer.Sound("sounds/{}.{}".format(sound_name, ext))
+            sound = mixer.Sound("/home/pi/tpc/sounds/{}.{}".format(sound_name, ext))
             self.sounds[sound_name] = sound
         return sound
     
