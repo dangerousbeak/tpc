@@ -4,6 +4,7 @@ from random import randrange
 
 ATTRACT ="ATTRACT"
 PRESTAGE = "PRESTAGE"
+WAITING_FOR_STAGE = "WAITING_FOR_STAGE"
 STAGE = "STAGE"
 BLINK = "BLINK"
 FAULT = "FAULT"
@@ -21,6 +22,7 @@ class Racing(Zone):
 
     def exit(self):
         self.game.sounds.stop_background_noise()
+        self.game.clock.reset()
 
     def enter_state(self, state):
         g = self.game
@@ -44,7 +46,14 @@ class Racing(Zone):
         if state == PRESTAGE:
             g.sounds.play("prestage")
             g.lights.turn_on_only(0)
-            return State(STAGE, delay=3)
+            return State(WAITING_FOR_STAGE, delay=3)
+
+        if state == WAITING_FOR_STAGE:
+            if sub_state == 3:
+                return State(ATTRACT, delay=30)
+            if sub_state > 0:
+                g.sounds.play("beep")
+            return State(WAITING_FOR_STAGE, sub_state+1, delay=10)
 
         if state == STAGE:
             g.sounds.play("racers ready")
@@ -137,6 +146,7 @@ class Racing(Zone):
         if g.buttons.blue:
             g.sounds.play("crash")
 
+            
         if state == ATTRACT:
             if False:
                 if state.timer > self.random_time:
@@ -150,6 +160,11 @@ class Racing(Zone):
                 
             if g.buttons.big:
                 return State(PRESTAGE)
+            return
+
+        if state == WAITING_FOR_STAGE:
+            if g.optos.inner:
+                return State(STAGE)
             return
 
         if state == BLINK:

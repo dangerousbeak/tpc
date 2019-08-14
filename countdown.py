@@ -36,6 +36,7 @@ class Countdown:
     def go_to(self, new_state):
         while self.state != new_state:
             self.pulse()
+            time.sleep(0.5)
 
     def reset(self):
         self.go_to(RESET)
