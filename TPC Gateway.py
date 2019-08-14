@@ -15,6 +15,3 @@ except KeyboardInterrupt:
 finally:  
     game.cleanup()
 
-
-
-
