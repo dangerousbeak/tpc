@@ -23,11 +23,16 @@ class SwitchedInput:
     def __init__(self, gpios):
         self.gpios = gpios
         self._muted = {}
+        self._switches = {}
         
         for b, pud in gpios.items():
             GPIO.setup(int(b), GPIO.IN, pull_up_down=pud)
         
     def triggered(self, b):
+        if type(b) is tuple:
+            return all([
+                self.triggered(x) for x in b
+            ])
         return GPIO.input(b) == (self.gpios[b] == GPIO.PUD_DOWN)
 
     def all_triggered(self):
@@ -50,12 +55,30 @@ class SwitchedInput:
         print("button: {}".format(b))
         return True
 
-  
+    def switched(self, b):
+        prev = self._switches.get(b)
+        triggered = self.triggered(b)
+        self._switches[b] = triggered
+
+        if prev is None:
+            return False
+
+        if triggered == prev:
+            return False
+
+        return True
+
+
 class Buttons(SwitchedInput):
     def __init__(self):
         super(Buttons, self).__init__({
-            b: GPIO.PUD_DOWN
-            for b in list(Button)
+            Button.BLACK: GPIO.PUD_DOWN,
+            Button.BLUE: GPIO.PUD_DOWN,
+            Button.GREEN: GPIO.PUD_DOWN,
+            Button.YELLOW: GPIO.PUD_DOWN,
+            Button.RED: GPIO.PUD_DOWN,
+            Button.BIG: GPIO.PUD_DOWN,
+            Button.BACK: GPIO.PUD_UP,
         })
         
     @property
@@ -81,8 +104,15 @@ class Buttons(SwitchedInput):
     @property
     def big(self):
         return self.check(Button.BIG)
+    
+    @property
+    def big(self):
+        return self.check(Button.BIG)
 
-
+    @property
+    def back(self):
+        return self.triggered(Button.BACK)  # no debouncing
+    
 class Optos(SwitchedInput):
     def __init__(self):
         super(Optos, self).__init__({
