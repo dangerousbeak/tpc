@@ -75,6 +75,10 @@ class Buttons(SwitchedInput):
         return self.check(Button.YELLOW)
     
     @property
+    def green(self):
+        return self.check(Button.GREEN)
+    
+    @property
     def big(self):
         return self.check(Button.BIG)
 
