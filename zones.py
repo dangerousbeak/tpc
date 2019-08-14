@@ -101,6 +101,7 @@ class Racing(Zone):
                     "revving 2",
                     "revving 3",
                     "revving 4",
+                    "revving 5",
                  ])
                 
             if not sub_state % 2:
@@ -241,18 +242,34 @@ class Racing(Zone):
         if g.buttons.green:
             if state.state in (RUNNING):
                 g.sounds.play_random([
-                    "2 - fixing",  #split this into multiple sound files
+                    "2 - fixing-1",
+                    "2 - fixing-2",
+                    "2 - fixing-3",
+                    "2 - fixing-4",
+                    "2 - fixing-5",
+                    "2 - fixing-6",
+                    "2 - fixing-7",
+                    "2 - fixing-8",
+                    "2 - fixing-9",
+                    "2 - fixing-10",
                 ])
 
         if g.buttons.blue:
             if state.state in (GO, WAITING_TO_CROSS, GAVE_UP, RUNNING, END_OF_RACE):
                 g.sounds.play_random([
-                    "cheering-1",  #find these, they don't exist
+                    "cheering-1",
+                    "cheering-2",
+                    "cheering-3",
+                    "cheering-4",
                 ])
 
         if g.buttons.black:
-            g.sounds.play("crash")  #change this one to booing sounds, do double press blue black for reset
-            return State(ATTRACT)
+            if state.state in (GO, WAITING_TO_CROSS, GAVE_UP, RUNNING, END_OF_RACE):
+                g.sounds.play_random([
+                    "booing-1",
+                    "booing-2",
+                    "booing-3",
+                ])
 
             
         if state == ATTRACT:
@@ -272,7 +289,8 @@ class Racing(Zone):
                 
             # Multi button check:
             if g.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
-                g.sounds.play("2 - fixing")
+                g.sounds.play("crash")
+                return State(ATTRACT)
                 
             if state.timer > self.random_time:
                 g.sounds.play_random([
@@ -283,14 +301,26 @@ class Racing(Zone):
                     "hey stoner press this button-5",
                 ])
                 self.random_time = self.random_sound_time(state)
+
+            if g.optos.outer: #see if someone is nearby in attract mode
+                #maybe put another random timer here?
+                g.sounds.play_random([
+                    "don't just stand there I know youre there-1",
+                    "don't just stand there I know youre there-2",
+                    "don't just stand there I know youre there-3",
+                ])
+
+            return
+
+
                 
             if g.buttons.big:
                 return State(PRESTAGE)
             return
 
         if state == WAITING_FOR_STAGE:
-            if g.optos.inner:
-                return State(STAGE)
+            if g.optos.inner: #make sure someone is one the track
+                return State(STAGE) #go from pre-stage to stage
             return
 
         if state == BLINK:
