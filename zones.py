@@ -128,6 +128,12 @@ class Racing(Zone):
             g.sounds.play("crash")
             return State(ATTRACT)
 
+        if g.buttons.red:
+            g.clock.pulse();
+
+        if g.buttons.yellow:
+            g.clock.reset();
+            
         if g.buttons.blue:
             g.sounds.play("crash")
 

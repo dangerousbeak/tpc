@@ -1,32 +1,47 @@
 #!/usr/bin/python
 import RPi.GPIO as GPIO
 import time
+from enum import IntEnum
+
+
+RESET = 0
+STARTED = 1
+STOPPED = 2
+
 
 class Countdown:
     def __init__(self, pin):
-        self.state = 0;
+        self.state = RESET;
         GPIO.setup(pin, GPIO.OUT)
 
     def pulse(self):
         GPIO.output(12, GPIO.LOW)
-        time.sleep(0.04)
+        time.sleep(0.1)
         GPIO.output(12, GPIO.HIGH)
-        self.state = (self.state + 1) % 3
+
+        if self.state == RESET:
+            self.state = STARTED
+            
+        elif self.state == STARTED:
+            self.state = STOPPED
+            
+        elif self.state == STOPPED:
+            self.state = RESET
+            time.sleep(0.01)
+            GPIO.output(12, GPIO.LOW)
+            time.sleep(0.03)
+            GPIO.output(12, GPIO.HIGH)
+
 
     def go_to(self, new_state):
         while self.state != new_state:
             self.pulse()
-            if self.state == 0:
-                time.sleep(0.08)
-                GPIO.output(12, GPIO.LOW)
-                time.sleep(0.04)
-                GPIO.output(12, GPIO.HIGH)
-    
+
     def reset(self):
-        self.go_to(0)
+        self.go_to(RESET)
 
     def start(self):
-        self.go_to(1)
+        self.go_to(STARTED)
 
     def stop(self):
-        self.go_to(2)
+        self.go_to(STOPPED)
