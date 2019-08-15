@@ -310,10 +310,6 @@ class Racing(Zone):
                     "don't just stand there I know youre there-3",
                 ])
 
-            return
-
-
-                
             if g.buttons.big:
                 return State(PRESTAGE)
             return

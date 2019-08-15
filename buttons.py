@@ -19,10 +19,16 @@ class Opto(IntEnum):
     OUTER = 15
 
 
+class Debounced:
+    def __init__(self, value, until):
+        self.value = value
+        self.until = until
+
 class SwitchedInput:
     def __init__(self, gpios):
         self.gpios = gpios
         self._muted = {}
+        self._debounced = {}
         self._switches = {}
         
         for b, pud in gpios.items():
@@ -33,7 +39,17 @@ class SwitchedInput:
             return all([
                 self.triggered(x) for x in b
             ])
-        return GPIO.input(b) == (self.gpios[b] == GPIO.PUD_DOWN)
+        
+        now = time.time()
+        debounced = self._debounced.get(b)
+        if debounced:
+            if now < debounced.until:
+                return debounced.value
+            del self._debounced[b]
+
+        triggered = (GPIO.input(b) == (self.gpios[b] == GPIO.PUD_DOWN))
+        self._debounced[b] = Debounced(triggered, until=now + 0.1)
+        return triggered
 
     def all_triggered(self):
         return [ b for b in self.gpios
@@ -111,7 +127,7 @@ class Buttons(SwitchedInput):
 
     @property
     def back(self):
-        return self.triggered(Button.BACK)  # no debouncing
+        return self.triggered(Button.BACK)
     
 class Optos(SwitchedInput):
     def __init__(self):
