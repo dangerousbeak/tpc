@@ -1,13 +1,18 @@
 #!/usr/bin/python
 from game import Game, State
-from zones import Racing, BLINK
+from racing import Racing
+from quiet import QuietAttract
 
-game = Game()
+game = Game({
+    "quiet": QuietAttract,
+    "racing": Racing,
+})
 
 try:
-    game_mode = Racing(game, "racing")
-    state = None  # State(BLINK)
-    game.run(game_mode, state=state)
+    if game.buttons.back:
+        game.play("racing")
+    else:
+        game.play("quiet")
 
 except KeyboardInterrupt:  
     print("Quit.")

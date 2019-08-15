@@ -37,8 +37,13 @@ class State:
         return not self == o
 
 
+class Exit:
+    def __init__(self, value):
+        self.value = value
+
+
 class Game:
-    def __init__(self):
+    def __init__(self, modes):
         GPIO.setmode(GPIO.BCM)  #set up to use gpio port numbers (instead of pin #s)
 
         self.buttons = Buttons()
@@ -48,12 +53,17 @@ class Game:
         self.sounds = Sounds()
         self.clock = Countdown(12)
 
+        self.modes = modes
+
     def cleanup(self):
         self.lights.turn_off_all()
         GPIO.cleanup()  #clean exit of GPIO ports
 
     def time(self):
         return int(round(time.time() * 1000))
+
+    def find_mode(self, name):
+        return self.modes[name](self, name)
         
     def run(self, game_mode, state=None):
         start_state = game_mode.enter()
@@ -76,9 +86,16 @@ class Game:
                         break
 
                     state.timer = (now - timer_start) / 1000.0
+
+                    ret = self.idle(game_mode)
+                    if isinstance(ret, Exit):
+                        return ret
+                    
                     ret = game_mode.idle(state)
                     if isinstance(ret, State):
                         next_state = ret
+                    if isinstance(ret, Exit):
+                        return ret
 
                 if next_state.state != state.state:
                     game_mode.exit_state(state)
@@ -89,8 +106,19 @@ class Game:
         finally:
             game_mode.exit()
 
-    def idle(self):
+    def idle(self, game_mode):
         pass
+
+    def play(self, name):
+        game_mode = self.find_mode(name)
+        state = None
+    
+        while True:
+            result = self.run(game_mode, state)
+            game_mode, state = self.mode_exited(game_mode, result.value)
+            
+    def mode_exited(self, game_mode, value):
+        return self.find_mode(value), None
 
 
 class Zone:

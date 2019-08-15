@@ -1,4 +1,4 @@
-from game import Zone, State
+from game import Zone, State, Exit
 from random import randrange
 from buttons import Button
 
@@ -204,6 +204,16 @@ class Racing(Zone):
         g = self.game
         sub_state = state.sub_state
 
+        # Back switch check:
+        if g.buttons.switched( Button.BACK ):
+            if not g.buttons.back:
+                return Exit("quiet")
+
+        # Multi button check: inner parens are important
+        if g.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
+            g.sounds.play("crash")
+            return State(ATTRACT)
+
         if g.buttons.red:
             if state.state in (GO, WAITING_TO_CROSS, GAVE_UP, RUNNING, END_OF_RACE):
                 g.sounds.play_random([
@@ -273,25 +283,6 @@ class Racing(Zone):
 
             
         if state == ATTRACT:
-            # Back switch check:
-            if g.buttons.switched( Button.BACK ):
-                if g.buttons.back:
-                    return State(ATTRACT, 0)
-                else:
-                    g.sounds.stop_background_noise()
-                    g.sounds.play_random([
-                        "don't touch that-1",
-                        "don't touch that-2",
-                        "don't touch that-3",
-                        "don't touch that-4",
-                        "don't touch that-5",                        
-                    ])
-                
-            # Multi button check:
-            if g.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
-                g.sounds.play("crash")
-                return State(ATTRACT)
-                
             if state.timer > self.random_time:
                 g.sounds.play_random([
                     "hey stoner press this button-1",
