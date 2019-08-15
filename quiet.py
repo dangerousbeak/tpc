@@ -6,7 +6,6 @@ from buttons import Button
 ATTRACT ="ATTRACT"
 
 
-
 class QuietAttract(Zone):
     
     def enter(self):
@@ -30,7 +29,8 @@ class QuietAttract(Zone):
         g = self.game
         sub_state = state.sub_state
 
-        # Back switch check:
-        if g.buttons.switched( Button.BACK ):
-            if g.buttons.back:
-                return Exit("racing")
+        # This is just an example
+        if g.buttons.blue:
+            return Exit("racing")
+
+

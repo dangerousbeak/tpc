@@ -22,7 +22,7 @@ class Racing(Zone):
         return State(ATTRACT)
 
     def exit(self):
-        self.game.sounds.stop_background_noise()
+        self.game.sounds.stop_background()
         self.game.clock.reset()
 
     def enter_state(self, state):
@@ -32,7 +32,7 @@ class Racing(Zone):
         if state == ATTRACT:
             if state.sub_state == 0:
                 g.clock.reset()
-                g.sounds.play_background_noise()
+                g.sounds.play_background("0 - race-track-sounds.mp3", loop=True)
                 self.random_time = self.random_sound_time(state)
                 
             if not sub_state % 2:
@@ -92,7 +92,7 @@ class Racing(Zone):
             return State(BLINK, delay=2)
 
         if state == BLINK:
-            self.game.sounds.stop_background_noise()
+            self.game.sounds.stop_background()
             
             if sub_state % 15 == 0:
                 g.sounds.play_random([
@@ -156,7 +156,7 @@ class Racing(Zone):
             g.lights.turn_on(5)
             g.sounds.play("long beep")
             g.clock.start()
-            g.sounds.play_background_noise()
+            g.sounds.play_background("0 - race-track-sounds.mp3", loop=True)
             g.sounds.play_random([
                     "3 - pulling away",
                     "3 - pulling away-2",
@@ -204,10 +204,9 @@ class Racing(Zone):
         g = self.game
         sub_state = state.sub_state
 
-        # Back switch check:
-        if g.buttons.switched( Button.BACK ):
-            if not g.buttons.back:
-                return Exit("quiet")
+        # This is just an example
+        if g.buttons.blue:
+            return Exit("quiet")
 
         # Multi button check: inner parens are important
         if g.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):

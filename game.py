@@ -1,6 +1,6 @@
 #!/usr/bin/python
 import RPi.GPIO as GPIO
-from buttons import Buttons, Optos
+from buttons import Buttons, Optos, Button
 from lights import Lights, Outlets
 from sounds import Sounds
 from countdown import Countdown
@@ -75,6 +75,9 @@ class Game:
 
                 print("{}:{}".format(game_mode, state))
                 new_state = game_mode.enter_state(state)
+                if isinstance(new_state, Exit):
+                    return new_state
+                    
                 next_time = start_time + new_state.delay*1000
 
                 next_state = None
@@ -92,10 +95,10 @@ class Game:
                         return ret
                     
                     ret = game_mode.idle(state)
-                    if isinstance(ret, State):
-                        next_state = ret
                     if isinstance(ret, Exit):
                         return ret
+                    if isinstance(ret, State):
+                        next_state = ret
 
                 if next_state.state != state.state:
                     game_mode.exit_state(state)
@@ -107,15 +110,31 @@ class Game:
             game_mode.exit()
 
     def idle(self, game_mode):
-        pass
+        # This is global stuff
+        
+        if self.buttons.switched( Button.BACK ):
+            self.sounds.play("beep")
+            if self.buttons.back:
+                return Exit("racing")
+            else:
+                return Exit("quiet")
+
+        if self.buttons.red:
+            return Exit("songs")
+
+        # if it was before 7 and now it's after 7
+        # then return Exit("songs")
 
     def play(self, name):
         game_mode = self.find_mode(name)
         state = None
-    
+        print("Starting {}".format(game_mode))
+        
         while True:
             result = self.run(game_mode, state)
+            print("{} exited: {}".format(game_mode, result.value))
             game_mode, state = self.mode_exited(game_mode, result.value)
+            print("Switching to {}".format(game_mode))
             
     def mode_exited(self, game_mode, value):
         return self.find_mode(value), None
