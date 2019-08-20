@@ -119,7 +119,7 @@ class Game:
             else:
                 return Exit("quiet")
 
-        if self.buttons.red:
+        if self.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
             return Exit("songs")
 
         # if it was before 7 and now it's after 7

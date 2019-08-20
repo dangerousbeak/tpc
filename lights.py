@@ -51,15 +51,15 @@ class Lights(SwitchedOutput):
     def __init__(self):
         # GPIO | Relay# | Controls
         #----------------------------------
-        # 02      01     Light 1 - Sm Yellow (Pre-stage)
-        # 03      02     Light 2 - Sm Yellow (Stage)
+        # 07      01     Light 1 - Sm Yellow (Pre-stage)
+        # 08      02     Light 2 - Sm Yellow (Stage)
         # 04      03     Light 3 - Big Yellow (Amber 1)
         # 17      04     Light 4 - Big Yellow (Amber 2)
         # 27      05     Light 5 - Big Yellow (Amber 3)
         # 22      06     Light 6 - Big Green (Start)
         # 10      07     Light 7 - Big Red (False Start)
         # 09      08     Unused
-        super(Lights, self).__init__([2, 3, 4, 17, 27, 22, 10, 9])
+        super(Lights, self).__init__([7, 8, 4, 17, 27, 22, 10, 9])
 
 
 class Outlets(SwitchedOutput):
