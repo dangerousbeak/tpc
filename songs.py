@@ -12,6 +12,7 @@ DONE = "DONE"
 class Songs(Zone):
     
     def enter(self):
+        self.sounds.set_volume(1.5)  # Will 1.5 work?
         return State(WAITING)
 
     def enter_state(self, state):
@@ -30,6 +31,7 @@ class Songs(Zone):
             return State(DONE, delay=165) #2 min 45 seconds
 
         if state == DONE:
+            self.sounds.set_volume(1)
             return Exit("racing")
 
     def idle(self, state):

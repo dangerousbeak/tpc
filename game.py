@@ -6,7 +6,6 @@ from sounds import Sounds
 from countdown import Countdown
 import time
 
-
 class State:
     def __init__(self, state, sub_state=0, delay=0):
         self.state = state
@@ -54,6 +53,7 @@ class Game:
         self.clock = Countdown(12)
 
         self.modes = modes
+        self.last_time = 0
 
     def cleanup(self):
         self.lights.turn_off_all()
@@ -123,15 +123,29 @@ class Game:
         if self.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
             return Exit("songs")
 
-        if self.game_mode == "songs":
-            if self.buttons.check( (Button.BLACK) ):
-                g.sounds.set_volume(g.sounds.volume+1)
-            if self.buttons.check( (Button.BLUE) ):
-                g.sounds.set_volume(g.sounds.volume-1)
+        if self.game_mode.name == "songs":
+            if self.buttons.black:
+                g.sounds.volume_up()
+            if self.buttons.blue:
+                g.sounds.volume_down()
+
 
         # Put in stuff for time check & volume changes, e.g.
         # if it was before 7am and now it's after 7am
         # then return Exit("songs")
+        if self.check_time(0):  # At midnight
+            self.sounds.set_volume(0.5)
+
+        if self.check_time(2):  # At 2am
+            self.sounds.set_volume(0.2)
+
+        if self.check_time(4):  # At 4am
+            return Exit("quiet")
+
+        if self.check_time(8):  # At 8am (choose wisely)
+            return Exit("songs")
+
+        self.last_time = time.localtime()
 
     def play(self, name):
         game_mode = self.find_mode(name)
@@ -147,6 +161,11 @@ class Game:
     def mode_exited(self, game_mode, value):
         return self.find_mode(value), None
 
+    def check_time(self, hr):
+        now = time.localtime()
+        if hr == 0:
+            return self.last_time.hour > 20
+        return self.last_time.hour < hr and now.hour == hr
 
 class Zone:
     def __init__(self, game, name):
