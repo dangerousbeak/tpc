@@ -117,6 +117,7 @@ class Game:
             if self.buttons.back:
                 return Exit("racing")
             else:
+                self.sounds.play("gurble")
                 return Exit("quiet")
 
         if self.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
