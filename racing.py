@@ -47,7 +47,7 @@ class Racing(Zone):
             return State(ATTRACT, sub_state+1, delay=1)
         
         if state == PRESTAGE:
-            g.outlets.turn_off_all() #turn on outlet lights in case they ended in off state -- BACKWARDS ON/OFF!
+            g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state
             g.sounds.play_random([
                     "racers at prestage-1",
                     "racers at prestage-2",
@@ -145,14 +145,14 @@ class Racing(Zone):
             g.sounds.play("short beep")
             g.lights.turn_on(2 + sub_state)
             if sub_state == 0:
-                g.outlets.turn_off_all() #turn on outlet lights in case they ended in off state -- BACKWARDS ON/OFF!           
+                g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state           
             if sub_state == 2:
                 return State(WAITING_TO_CROSS, delay=1)
             return State(GO, sub_state+1, delay=1)
 
         if state == WAITING_TO_CROSS:
             if sub_state == 0:
-                g.outlets.turn_off_all() #turn on outlet lights in case they ended in off state -- BACKWARDS ON/OFF!           
+                g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state          
                 g.lights.turn_on(5)  #turn on Green Light
                 g.sounds.play("long beep")
                 g.clock.start()
@@ -194,7 +194,7 @@ class Racing(Zone):
 
             # Finish alternating lights
             if sub_state == 50:
-                g.outlets.turn_off_all() #turn on outlet lights in case they ended in off state -- BACKWARDS ON/OFF!
+                g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state
                 return State(END_OF_RACE)
             
             return State(FINISHED, sub_state+1, delay=0.05)
@@ -347,7 +347,7 @@ class Racing(Zone):
         if state == WAITING_TO_CROSS:
             if g.optos.beam:
                 g.sounds.play("beep tone")
-                g.outlets.turn_off_all() #turn on outlet lights in case they ended in off state -- BACKWARDS ON/OFF!
+                g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state
                 return State(RUNNING)
             return
 
