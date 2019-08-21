@@ -21,11 +21,17 @@ class Sounds(object):
 
         self.sounds = {}
         self.playing_music = False
+        self.set_volume(1.0)
+
+    def set_volume(volume):
+        self.volume = volume
+        self.mixer.music.set_volume(volume)
 
     def play_background(self, filename, loop=False):
         if self.playing_music == filename:
             return;
-        
+
+        self.mixer.music.set_volume(this.volume)
         self.mixer.music.load('/home/pi/tpc/sounds/{}'.format(filename))
         if loop:
             self.mixer.music.play(-1)  #negative number = loop forever
@@ -49,6 +55,7 @@ class Sounds(object):
         empty_channel = self.mixer.find_channel()
         if not empty_channel:
             return
+        empty_channel.set_volume(self.volume)
         empty_channel.play(sound)
 
     def play_random(self, sound_names, ext="wav"):
