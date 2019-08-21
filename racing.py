@@ -114,8 +114,6 @@ class Racing(Zone):
             if sub_state % 20 == 0:
                 g.sounds.play_random([
                     "press yellow button to start race-1",
-                    "press yellow button to start race-2",
-                    "press yellow button to start race-3",
                     "press yellow button to start race-4",
                     "press yellow button to start race-5",
                  ])
