@@ -172,6 +172,8 @@ class Racing(Zone):
             return State(WAITING_TO_CROSS, sub_state+1, delay=0.05)
 
         if state == GAVE_UP:
+            g.lights.turn_off(5)  #turn off Green Light
+            g.lights.turn_on(6)  #turn on Red Light
             g.sounds.play("racer disqualified-4")
             return State(ATTRACT, delay=5)
         
