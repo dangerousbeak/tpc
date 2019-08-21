@@ -72,12 +72,8 @@ class Racing(Zone):
                 g.sounds.play_random([
                     "what are you doing-1",
                     "what are you doing-2",
-                    "what are you doing-3",
                     "what are you doing-4",
-                    "what are you doing-5",
-                    "what are you doing-6",
                     "what are you doing-7",
-                    "i know youre there-1",
                     "don't just stand there I know youre there-1",
                     "don't just stand there I know youre there-2",
                     "don't just stand there I know youre there-3",
@@ -128,7 +124,6 @@ class Racing(Zone):
             if sub_state == 50:
                 g.sounds.play_random([
                     "cant you follow instructions-1",
-                    "cant you follow instructions-2",
                     "cant you follow instructions-3",
                     "cant you follow instructions-4",
                     "cant you follow instructions-5",
@@ -330,7 +325,6 @@ class Racing(Zone):
                 g.sounds.play_random([
                     "don't just stand there I know youre there-1",
                     "don't just stand there I know youre there-2",
-                    "don't just stand there I know youre there-3",
                 ])
 
             if g.buttons.big:
