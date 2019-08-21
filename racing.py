@@ -20,6 +20,7 @@ END_OF_RACE = "END OF RACE"
 class Racing(Zone):
     
     def enter(self):
+        self.shut_up_until = 0
         return State(ATTRACT)
 
     def exit(self):
@@ -29,7 +30,6 @@ class Racing(Zone):
     def enter_state(self, state):
         g = self.game
         sub_state = state.sub_state
-        self.shut_up_until = 0
 
         if state == ATTRACT:
             if state.sub_state == 0:
