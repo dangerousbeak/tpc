@@ -20,6 +20,7 @@ END_OF_RACE = "END OF RACE"
 class Racing(Zone):
     
     def enter(self):
+        self.shut_up_until = 0
         return State(ATTRACT)
 
     def exit(self):
@@ -52,7 +53,6 @@ class Racing(Zone):
                     "racers at prestage-1",
                     "racers at prestage-2",
                     "racers at prestage-3",
-                    "racers at prestage-4",
                     "racers at prestage-5",
                 ])
             g.sounds.play_random([
@@ -76,7 +76,6 @@ class Racing(Zone):
                     "what are you doing-7",
                     "don't just stand there I know youre there-1",
                     "don't just stand there I know youre there-2",
-                    "don't just stand there I know youre there-3",
                  ])
             return State(WAITING_FOR_STAGE, sub_state+1, delay=10)
 
@@ -319,11 +318,12 @@ class Racing(Zone):
                 self.random_time = self.random_sound_time(state)
 
             if g.optos.outer: #see if someone is nearby in attract mode
-                #maybe put another random timer here?
-                g.sounds.play_random([
-                    "don't just stand there I know youre there-1",
-                    "don't just stand there I know youre there-2",
-                ])
+                if state.timer > self.shut_up_until:
+                    g.sounds.play_random([
+                        "don't just stand there I know youre there-1",
+                        "don't just stand there I know youre there-2",
+                    ])
+                    self.shut_up_until = state.timer + randrange(5, 15) # seconds between talking
 
             if g.buttons.big:
                 return State(PRESTAGE)

@@ -120,10 +120,6 @@ class Buttons(SwitchedInput):
     @property
     def big(self):
         return self.check(Button.BIG)
-    
-    @property
-    def big(self):
-        return self.check(Button.BIG)
 
     @property
     def back(self):
@@ -143,8 +139,8 @@ class Optos(SwitchedInput):
     
     @property
     def outer(self):
-        return self.check(Opto.OUTER, mute_time=6.0)
+        return self.triggered(Opto.OUTER)
     
     @property
     def inner(self):
-        return self.check(Opto.INNER, mute_time=6.0)
+        return self.triggered(Opto.INNER)
