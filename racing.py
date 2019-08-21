@@ -53,7 +53,6 @@ class Racing(Zone):
                     "racers at prestage-1",
                     "racers at prestage-2",
                     "racers at prestage-3",
-                    "racers at prestage-4",
                     "racers at prestage-5",
                 ])
             g.sounds.play_random([
