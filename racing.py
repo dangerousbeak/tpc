@@ -29,6 +29,7 @@ class Racing(Zone):
     def enter_state(self, state):
         g = self.game
         sub_state = state.sub_state
+        self.shut_up_until = 0
 
         if state == ATTRACT:
             if state.sub_state == 0:
@@ -319,11 +320,13 @@ class Racing(Zone):
                 self.random_time = self.random_sound_time(state)
 
             if g.optos.outer: #see if someone is nearby in attract mode
-                #maybe put another random timer here?
-                g.sounds.play_random([
-                    "don't just stand there I know youre there-1",
-                    "don't just stand there I know youre there-2",
-                ])
+                if state.timer > self.shut_up_until:
+                    g.sounds.play_random([
+                        "don't just stand there I know youre there-1",
+                        "don't just stand there I know youre there-2",
+                        "don't just stand there I know youre there-3",
+                    ])
+                    self.shut_up_until = self.state.timer + randrange(5, 15) # seconds between talking
 
             if g.buttons.big:
                 return State(PRESTAGE)
