@@ -14,9 +14,15 @@ class SwitchedOutput(object):
         self.light_state = [ False for i in self.all() ]
         self.reset()
 
+    def on_value(self, i):
+      return GPIO.LOW
+
+    def off_value(self, i):
+      return GPIO.HIGH
+
     def reset(self): #force actual GPIO output state to match light_state
         for i in self.all():
-            state = GPIO.LOW if self.light_state[i] else GPIO.HIGH
+            state = self.on_value(i) if self.light_state[i] else self.off_value(i)
             GPIO.output(self.GPIOlist[i], state) 
 
     def turn_on(self, light_number):
@@ -65,3 +71,10 @@ class Lights(SwitchedOutput):
 class Outlets(SwitchedOutput):
     def __init__(self):
         super(Outlets, self).__init__([16, 20])
+
+    def on_value(self, i):
+      return GPIO.HIGH
+
+    def off_value(self, i):
+      return GPIO.LOW
+
