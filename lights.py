@@ -28,13 +28,13 @@ class SwitchedOutput(object):
     def turn_on(self, light_number):
         if self.light_state[light_number]:
            return
-        GPIO.output(self.GPIOlist[light_number], GPIO.LOW) #turn on light
+        GPIO.output(self.GPIOlist[light_number], self.on_value(i))
         self.light_state[light_number] = True
 
     def turn_off(self, light_number):
         if not self.light_state[light_number]:
            return
-        GPIO.output(self.GPIOlist[light_number], GPIO.HIGH) #turn off light
+        GPIO.output(self.GPIOlist[light_number], self.off_value(i))
         self.light_state[light_number] = False
 
     def turn_on_only(self, light_number):
