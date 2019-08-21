@@ -117,12 +117,20 @@ class Game:
             if self.buttons.back:
                 return Exit("racing")
             else:
+                self.sounds.play("gurble")
                 return Exit("quiet")
 
         if self.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
             return Exit("songs")
 
-        # if it was before 7 and now it's after 7
+        if self.game_mode == "songs":
+            if self.buttons.check( (Button.BLACK) ):
+                g.sounds.set_volume(g.sounds.volume+1)
+            if self.buttons.check( (Button.BLUE) ):
+                g.sounds.set_volume(g.sounds.volume-1)
+
+        # Put in stuff for time check & volume changes, e.g.
+        # if it was before 7am and now it's after 7am
         # then return Exit("songs")
 
     def play(self, name):
