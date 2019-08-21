@@ -123,7 +123,7 @@ class Game:
         if self.buttons.check( (Button.GREEN, Button.RED, Button.YELLOW) ):
             return Exit("songs")
 
-        if self.game_mode == "songs":
+        if self.game_mode.name == "songs":
             if self.buttons.black:
                 g.sounds.volume_up()
             if self.buttons.blue:
