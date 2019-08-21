@@ -120,10 +120,6 @@ class Buttons(SwitchedInput):
     @property
     def big(self):
         return self.check(Button.BIG)
-    
-    @property
-    def big(self):
-        return self.check(Button.BIG)
 
     @property
     def back(self):

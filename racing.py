@@ -77,7 +77,6 @@ class Racing(Zone):
                     "what are you doing-7",
                     "don't just stand there I know youre there-1",
                     "don't just stand there I know youre there-2",
-                    "don't just stand there I know youre there-3",
                  ])
             return State(WAITING_FOR_STAGE, sub_state+1, delay=10)
 
@@ -324,9 +323,8 @@ class Racing(Zone):
                     g.sounds.play_random([
                         "don't just stand there I know youre there-1",
                         "don't just stand there I know youre there-2",
-                        "don't just stand there I know youre there-3",
                     ])
-                    self.shut_up_until = self.state.timer + randrange(5, 15) # seconds between talking
+                    self.shut_up_until = state.timer + randrange(5, 15) # seconds between talking
 
             if g.buttons.big:
                 return State(PRESTAGE)
