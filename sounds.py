@@ -23,7 +23,7 @@ class Sounds(object):
         self.playing_music = False
         self.set_volume(1.0)
 
-    def set_volume(volume):
+    def set_volume(self,volume):
         self.volume = volume
         self.mixer.music.set_volume(volume)
 
@@ -31,7 +31,7 @@ class Sounds(object):
         if self.playing_music == filename:
             return;
 
-        self.mixer.music.set_volume(this.volume)
+        self.mixer.music.set_volume(self.volume)
         self.mixer.music.load('/home/pi/tpc/sounds/{}'.format(filename))
         if loop:
             self.mixer.music.play(-1)  #negative number = loop forever
