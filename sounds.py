@@ -23,9 +23,22 @@ class Sounds(object):
         self.playing_music = False
         self.set_volume(1.0)
 
-    def set_volume(self,volume):
+    def set_volume(self, volume):
+        if volume < 0:
+            volume = 0
+        if volume > 2.0:  # Will anything above 1.0 work? I dunno
+            volume = 2.0
+        if volume == self.volume:
+            return
+
         self.volume = volume
         self.mixer.music.set_volume(volume)
+
+    def volume_up(self):
+        self.set_volume(self.volume + 0.1)
+
+    def volume_down(self):
+        self.set_volume(self.volume - 0.1)
 
     def play_background(self, filename, loop=False):
         if self.playing_music == filename:
