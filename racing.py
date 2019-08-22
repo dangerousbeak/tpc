@@ -68,7 +68,7 @@ class Racing(Zone):
         if state == WAITING_FOR_STAGE:
             if sub_state == 3:
                 return State(ATTRACT, delay=30)
-            if sub_state > 0:
+            if sub_state > 2:
                 g.sounds.play_random([
                     "what are you doing-1",
                     "what are you doing-2",
@@ -174,6 +174,7 @@ class Racing(Zone):
         if state == GAVE_UP:
             g.lights.turn_off(5)  #turn off Green Light
             g.lights.turn_on(6)  #turn on Red Light
+            g.clock.stop()
             g.sounds.play("racer disqualified-4")
             return State(ATTRACT, delay=5)
         
@@ -325,7 +326,7 @@ class Racing(Zone):
                         "don't just stand there I know youre there-1",
                         "don't just stand there I know youre there-2",
                     ])
-                    self.shut_up_until = state.timer + randrange(5, 15) # seconds between talking
+                    self.shut_up_until = state.timer + randrange(15, 45) # seconds between talking
 
             if g.buttons.big:
                 return State(PRESTAGE)

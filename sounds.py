@@ -21,24 +21,28 @@ class Sounds(object):
 
         self.sounds = {}
         self.playing_music = False
-        self.set_volume(1.0)
+        self.volume = 0
+        self.set_volume(.8) #initial starting volume
 
     def set_volume(self, volume):
-        if volume < 0:
+        if volume < 0.03: #since volume goes down as ratio, floor to zero
             volume = 0
-        if volume > 2.0:  # Will anything above 1.0 work? I dunno
-            volume = 2.0
+        if volume > 1.0:
+            volume = 1.0
         if volume == self.volume:
             return
 
         self.volume = volume
+        print(self.volume)
         self.mixer.music.set_volume(volume)
 
     def volume_up(self):
-        self.set_volume(self.volume + 0.1)
+        if self.volume < 0.04: #min volume after 0 to start
+            self.volume = 0.04
+        self.set_volume(self.volume*1.5)
 
     def volume_down(self):
-        self.set_volume(self.volume - 0.1)
+        self.set_volume(self.volume*.75)
 
     def play_background(self, filename, loop=False):
         if self.playing_music == filename:

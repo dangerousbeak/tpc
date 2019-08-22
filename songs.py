@@ -12,7 +12,6 @@ DONE = "DONE"
 class Songs(Zone):
     
     def enter(self):
-        self.sounds.set_volume(1.5)  # Will 1.5 work?
         return State(WAITING)
 
     def enter_state(self, state):
@@ -20,6 +19,7 @@ class Songs(Zone):
         sub_state = state.sub_state
 
         if state == WAITING:
+            g.sounds.set_volume(1)  # max volume
             return State(WAITING, delay=1000)
 
         if state == MORNING_TRAIN:

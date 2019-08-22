@@ -59,6 +59,6 @@ class QuietAttract(Zone):
         g = self.game
         sub_state = state.sub_state
         if g.buttons.big:
-            g.sounds.play("beep")
+            g.sounds.play("secret switch whisper")
 
 
