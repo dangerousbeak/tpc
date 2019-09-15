@@ -31,7 +31,7 @@ class Songs(Zone):
             return State(DONE, delay=165) #2 min 45 seconds
 
         if state == DONE:
-            self.sounds.set_volume(1)
+            g.sounds.set_volume(1)
             return Exit("racing")
 
     def idle(self, state):

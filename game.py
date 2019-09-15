@@ -169,7 +169,7 @@ class Game:
         now = time.localtime()
         if hr == 0:
             return self.last_time.tm_hour > 20
-        return self.last_time.tm_hour < hr and now.hour == hr
+        return self.last_time.tm_hour < hr and now.tm_hour == hr
 
 class Zone:
     def __init__(self, game, name):

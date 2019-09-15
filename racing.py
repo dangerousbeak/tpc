@@ -180,7 +180,7 @@ class Racing(Zone):
         
         if state == RUNNING:
             if not sub_state:
-                return State(RUNNING, 1, delay=10)
+                return State(RUNNING, 1, delay=5)
             return State(GAVE_UP, delay=180)
 
 
@@ -320,13 +320,27 @@ class Racing(Zone):
                 ])
                 self.random_time = self.random_sound_time(state)
 
+            if g.buttons.red or g.buttons.yellow or g.buttons.green or g.buttons.blue or g.buttons.black:
+                g.sounds.play_random([
+                    "don't touch that-1",
+                    "don't touch that-2",
+                    "don't touch that-3",
+                    "don't touch that-5",
+                    "don't touch that-6",
+                    "don't touch that-7",
+                ])
+
             if g.optos.outer: #see if someone is nearby in attract mode
                 if state.timer > self.shut_up_until:
                     g.sounds.play_random([
                         "don't just stand there I know youre there-1",
                         "don't just stand there I know youre there-2",
+                        "hey stoner press this button-1",
+                        "hey stoner press this button-2",
+                        "hey stoner press this button-3",
+                    
                     ])
-                    self.shut_up_until = state.timer + randrange(15, 45) # seconds between talking
+                    self.shut_up_until = state.timer + randrange(45, 150) # seconds between talking
 
             if g.buttons.big:
                 return State(PRESTAGE)

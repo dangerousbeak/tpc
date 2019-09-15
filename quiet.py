@@ -29,7 +29,7 @@ class QuietAttract(Zone):
         if state == PATTERN1:
             interval = 0.05 #smallest delay between light changes
             if sub_state == 0:
-                g.outlets.turn_on_all() #turn OFF outlet lights in case they ended in off state -- BACKWARDS ON/OFF!           
+                g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state          
                 g.lights.turn_off_all()  #turn OFF all traffic lights
 
             if sub_state > 10/interval: #change after 300 sec = 5 min at this pattern 
@@ -49,11 +49,9 @@ class QuietAttract(Zone):
             return State(PATTERN1, sub_state+1, delay=interval)
 
         if state == PATTERN2:
-            g.outlets.turn_off_all() #turn ON outlet lights in case they ended in off state -- BACKWARDS ON/OFF!           
+            g.outlets.turn_on_all() #turn ON outlet lights in case they ended in off state        
             g.lights.turn_on_all()  #turn ON all traffic lights
-            return State(PATTERN1, delay=20)
-
-
+            return State(PATTERN1, delay=10)
 
     def idle(self, state):
         g = self.game
